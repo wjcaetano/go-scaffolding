@@ -1,0 +1,180 @@
+# This file contains all available configuration options
+# with their default values.
+# options for analysis running
+run:
+  # include test files or not, default is true
+  tests: true
+  deadline: 10m
+# output configuration options
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
+  format: colored-line-number
+  # print lines of code with issue, default is true
+  print-issued-lines: true
+  # print linter name in the end of issue text, default is true
+  print-linter-name: true
+  # make issues output unique by line, default is true
+  uniq-by-line: true
+# all available settings of specific linters
+linters-settings:
+  depguard:
+    rules:
+      # Name of rule.
+      main:
+        # List of allowed packages.
+        allow:
+          - $gostd
+          - github.com/stretchr/testify/assert
+          - github.com/stretchr/testify/require
+          - github.com/stretchr/testify/mock
+          - github.com/go-playground/validator/v10
+          - github.com/newrelic/go-agent/v3/newrelic
+          - github.com/go-chi/render
+          - github.com/magiconair/properties
+          - github.com/stretchr/testify/suite
+          - github.com/h2non/gock
+  dupl:
+    # tokens count to trigger issue, 150 by default
+    threshold: 150
+  errcheck:
+    # report about not checking of errors in type assertions: `a := b.(MyStruct)`;
+    # default is false: such cases aren't reported by default.
+    check-type-assertions: true
+  funlen:
+    lines: 30
+    statements: 30 # https://golang.org/ref/spec#Statements
+  gofmt:
+    # simplify code: gofmt with `-s` option, true by default
+    simplify: true
+  gocognit:
+    # minimal code complexity to report, 30 by default (but we recommend 10-20)
+    min-complexity: 6
+  nestif:
+    # minimal complexity of if statements to report, 5 by default
+    min-complexity: 2
+  goconst:
+    # minimal length of string constant, 3 by default
+    min-len: 2
+    # minimal occurrences count to trigger, 3 by default
+    min-occurrences: 3
+  godot:
+    # check all top-level comments, not only declarations
+    check-all: true
+  gomnd:
+    settings:
+      mnd:
+        # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
+        checks: argument,case,condition,operation,return,assign
+        excludes: .*test.*
+  lll:
+    # max line length, lines longer will be reported. Default is 120.
+    # '\t' is counted as 1 character by default, and can be changed with the tab-width option
+    line-length: 170
+  unused:
+    # treat code as a program (not a library) and report unused exported identifiers; default is false.
+    # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
+    # if it's called for subdir of a project it can't find funcs usages. All text editor integrations
+    # with golangci-lint call it on a directory with the changed file.
+    check-exported: false
+  whitespace:
+    multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
+    multi-func: false # Enforces newlines (or comments) after every multi-line function signature
+  gocyclo:
+    # minimal code complexity to report, 30 by default (but we recommend 10-20)
+    min-complexity: 6
+  grouper:
+    const-require-grouping: true
+  revive:
+    # see https://github.com/mgechev/revive#available-rules for details.
+    ignore-generated-header: true
+    severity: error
+    rules:
+      - name: argument-limit #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#argument-limit
+        arguments: 4
+      - name: function-result-limit #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-result-limit
+        arguments: 2
+      - name: context-as-argument #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#context-as-argument
+      - name: error-return #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#error-return
+      - name: early-return #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#early-return
+      - name: modifies-value-receiver #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#modifies-value-receiver
+      - name: bare-return #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#bare-return
+      - name: if-return #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#if-return
+      - name: superfluous-else #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#superfluous-else
+      - name: unused-parameter #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unused-parameter
+      - name: confusing-results #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#confusing-results
+      - name: modifies-value-receiver #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#modifies-value-receiver
+      - name: receiver-naming #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#receiver-naming
+      - name: unnecessary-stmt #https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unnecessary-stmt
+linters:
+  enable:
+    - bodyclose
+    - deadcode
+    - depguard
+    - dupl
+    - errcheck
+    - funlen
+    - gocognit
+    - goconst
+    - gocritic
+    - godot
+    - gofmt
+    - goimports
+    - gomnd
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - nakedret
+    - nestif
+    - rowserrcheck
+    - exportloopref
+    - staticcheck
+    - structcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - varcheck
+    - errorlint
+    - ifshort
+    - sqlclosecheck
+    - cyclop
+    - revive
+    - gocyclo
+    - dogsled
+    - containedctx
+    - contextcheck
+    - errname
+    - grouper
+    - nilnil
+  disable:
+    - maligned
+    - prealloc
+    - testpackage
+    - scopelint
+  disable-all: false
+  presets:
+    - bugs
+    - unused
+  fast: false
+  # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
+  max-issues-per-linter: 0
+  # Maximum count of issues with the same text. Set to 0 to disable. Default is 3.
+  max-same-issues: 0
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - funlen
+        - scopelint
+        - dupl
+        - containedctx
+        - contextcheck
+        - errname
+        - bodyclose
+        - revive
+service:
+  golangci-lint-version: 1.53.1

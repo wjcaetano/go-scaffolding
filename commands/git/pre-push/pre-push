@@ -1,0 +1,79 @@
+# COLORS
+RED='\033[1;31m'
+GREEN="\033[0;32m"
+NO_COLOR='\033[0m'
+
+FILES_PATTERN='.go$'
+TAB=$(printf '\t')
+FORBIDDEN="(fmt\.P|((\s|\t|^|;)p))rint(ln|f)?\(.*"
+STAGED_GO_FILES=$(git diff --cached --name-only | grep ".go$")
+ROOT=$(git rev-parse --show-toplevel)
+API_DIR="$ROOT/docs/specs"
+ERRORS=false
+
+check_error() {
+	if [ $ERRORS = true ]; then
+		GANDALF=$(cat commands/git/gandalf-fail.txt)
+		echo "\n\n${RED}${GANDALF}${NO_COLOR}  \nFix it before push\n" && \
+		exit 1
+	fi
+}
+
+check_forbidden_words() {
+	echo "\nValidating source for forbidden words..."
+
+	for FILE in $STAGED_GO_FILES; do
+		if egrep -nHo --color $FORBIDDEN $FILE; then
+			ERRORS=true
+		fi
+	done
+
+	if [ $ERRORS = true ]; then
+		echo "${RED}Forbidden words listed above.${NO_COLOR}\n\n"
+	else
+		echo "${GREEN}No forbidden words found!${NO_COLOR}"
+	fi
+
+	check_error
+}
+
+check_api_specs_doc() {
+	echo "\nChecking API Specs Documentation..."
+	MAKE_DOC=$(make specs-generate)
+    STATUS=$?
+
+    if [ $STATUS -ne 0 ]; then
+        echo "$MAKE_DOC"
+        exit 1
+    fi
+
+    DIFF_BUNDLE=$(git diff --name-only --diff-filter=d "$API_DIR" | grep swagger.yaml)
+    if [ -z "$DIFF_BUNDLE" ]; then
+        echo "${GREEN}API Specs Documentation is up to date.${NO_COLOR}"
+    else
+        echo "${RED}API Specs Documentation seems to be out of date! Please commit the bundle.${NO_COLOR}"
+        ERRORS=true
+    fi
+
+	check_error
+}
+
+running_tests() {
+	echo "\nRunning tests..."
+	TEST=$(make test_local 2>&1| egrep -o "\-\-\- FAIL\:.*")
+
+	if [ -z "$TEST" ]; then
+		echo "${GREEN}All tests passed!\n${NO_COLOR}"
+	else
+		echo "${RED}Some tests failed:${NO_COLOR} \n\n ${TEST} \n"
+		ERRORS=true
+	fi
+
+	check_error
+}
+
+check_forbidden_words
+check_api_specs_doc
+running_tests
+
+echo "\n\n${GREEN}YOUR PUSH SHALL PASS${NO_COLOR}\n\n"

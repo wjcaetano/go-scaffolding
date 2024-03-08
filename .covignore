@@ -1,0 +1,8 @@
+.*/mocks/.*
+cmd/.*
+internal/server/*
+internal/httpclient
+internal/publisher
+internal/metrics/datadog.go
+test/integration/.*
+test/mock/.*

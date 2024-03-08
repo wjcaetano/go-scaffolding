@@ -1,0 +1,35 @@
+# COLORS
+RED='\033[1;31m'
+GREEN="\033[0;32m"
+NO_COLOR='\033[0m'
+
+ERRORS=false
+ROOT=$(git rev-parse --show-toplevel)
+API_DIR="$ROOT/docs/specs"
+
+show_gandalf_fail() {
+  GANDALF=$(cat commands/git/gandalf-fail.txt)
+  echo "\n\n${RED}${GANDALF}${NO_COLOR}  -  Fix it before push\n" && \
+  exit 1
+}
+
+check_linter() {
+	echo "\nRunning linter..."
+	LINT=$(make lint 2>&1 | grep -o "/.*\.go:.*")
+
+	if [ -z "$LINT" ]; then
+		echo "${GREEN}Linter passed!\n${NO_COLOR}"
+	else
+		echo "${RED}Linter reported errors${NO_COLOR}: \n\n ${LINT} \n"
+		ERRORS=true
+	fi
+}
+
+check_linter
+
+if [ $ERRORS = true ]; then
+    show_gandalf_fail
+    exit 1
+fi
+
+echo "\n${GREEN}YOUR COMMIT SHALL PASS${NO_COLOR}\n"

@@ -1,16 +1,26 @@
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+  # Next hooks are Code Quality hooks.
+  # If you want them to run on each commit, uncomment them
+  # These are OPTIONAL.
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.3.0
     hooks:
-    -   id: trailing-whitespace
-    -   id: end-of-file-fixer
-    -   id: check-yaml
-    -   id: check-added-large-files
--   repo: https://github.com/dnephin/pre-commit-golang
-    rev: v0.5.1
+      - id: pretty-format-golang
+        args:
+          - --autofix
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.56.2
     hooks:
-    -   id: go-fmt
--   repo: https://github.com/golangci/golangci-lint
-    rev: v1.42.1 # Use the ref you want to point at
+      - id: golangci-lint
+        entry: golangci-lint run
+        args:
+          - --max-issues-per-linter=0
+          - --max-same-issues=0
+          - --config=.code_quality/.golangci.yml
+          - --new-from-rev=HEAD~1 # comment this arg if you want to run pre-commit run --all-files
+  - repo: https://github.com/melisource/fury_datasec-git-hooks
+    rev: 1.0.1
     hooks:
-    -   id: golangci-lint
+      - id: pre_commit_hook
+        stages: [commit]
+        verbose: true

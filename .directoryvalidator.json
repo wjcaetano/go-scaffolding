@@ -1,0 +1,335 @@
+{
+  "ignoreFiles": [
+    "CONTRIBUTING.md",
+    "create_sql_user.sh",
+    "db-migration-base.sh",
+    "db-migration-create-link.sh",
+    "directory-validator.sh",
+    "docker-compose.yaml",
+    "Dockerfile.directory-validator",
+    "Dockerfile.runtime",
+    "docs",
+    "execute_before_test.sh",
+    "go.mod",
+    "go.sum",
+    "innersource.json",
+    "linter.sh",
+    "package.sh",
+    "publish.sh",
+    ".covignore",
+    "README.md",
+    "run_local.sh",
+    "run_migrations.sh",
+    "run_test.sh",
+    "run.sh",
+    "test.sh",
+    "variables.env",
+    "versions.tsv",
+    "wait-for-it.sh",
+    ".gitignore",
+    "Dockerfile",
+    "Makefile",
+    "pipeline",
+    ".fury",
+    "test",
+    "tests",
+    ".project",
+    ".directoryvalidator.json",
+    ".golangci-project.yml",
+    ".pre-commit-config.yaml",
+    "CODING_GUIDELINES.md",
+    "arch-go.yml",
+    "CHANGELOG.md",
+    "execution.log",
+    ".DS_Store",
+    "meli-system.yml"
+  ],
+  "ignoreDirs": [
+    "commands",
+    "tests",
+    "test",
+    ".code_quality",
+    ".git",
+    ".github",
+    "cmd",
+    "core",
+    "docs",
+    ".idea",
+    "git",
+    "init-mysql",
+    "internal",
+    "migrations",
+    "pkg",
+    "resources"
+  ],
+  "commonRules": {
+    "rule_mocks": {
+      "type": "directory",
+      "name": "mocks",
+      "isOptional": true,
+      "rules": [
+        {
+          "type": "file",
+          "name": "/.*/",
+          "isOptional": true
+        },
+        {
+          "type": "directory",
+          "name": "/.*/",
+          "isOptional": true
+        }
+      ]
+    },
+    "rule_anyfile": {
+      "type": "file",
+      "name": "/.*\\./",
+      "isOptional": true
+    },
+    "rule_anyfiletest": {
+      "type": "file",
+      "name": "/.*_test\\.go/",
+      "isOptional": true
+    },
+    "rule_anysubdirectory": {
+      "type": "directory",
+      "name": "/.*/",
+      "isOptional": true
+    },
+    "rule_subfeature": {
+      "type": "directory",
+      "name": "/.*/",
+      "isOptional": false,
+      "rules": [
+        {
+          "type": "common",
+          "key": "rule_anyfile"
+        },
+        {
+          "type": "common",
+          "key": "rule_anyfiletest"
+        },
+        {
+          "type": "common",
+          "key": "rule_mocks"
+        }
+      ]
+    }
+  },
+  "rules": [
+    {
+      "type": "directory",
+      "name": "app",
+      "isOptional": false,
+      "isRecursive": true,
+      "rules": [
+        {
+          "type": "directory",
+          "name": "/.*/",
+          "isOptional": false,
+          "rules": [
+            {
+              "type": "file",
+              "name": "entity.go",
+              "isOptional": true
+            },
+            {
+              "type": "file",
+              "name": "entity_test.go",
+              "isOptional": true
+            },
+            {
+              "type": "file",
+              "name": "errors.go",
+              "isOptional": true
+            },
+            {
+              "type": "file",
+              "name": "errors_test.go",
+              "isOptional": true
+            },
+            {
+              "type": "file",
+              "name": "dto.go",
+              "isOptional": true
+            },
+            {
+              "type": "file",
+              "name": "dto_test.go",
+              "isOptional": true
+            },
+            {
+              "type": "directory",
+              "name": "entrypoint",
+              "isOptional": true,
+              "rules": [
+                {
+                  "type": "directory",
+                  "name": "rest",
+                  "isOptional": true,
+                  "rules": [
+                    {
+                      "type": "common",
+                      "key": "rule_subfeature"
+                    }
+                  ]
+                },
+                {
+                  "type": "directory",
+                  "name": "bigq",
+                  "isOptional": true,
+                  "rules": [
+                    {
+                      "type": "common",
+                      "key": "rule_subfeature"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "directory",
+              "name": "metrics",
+              "isOptional": true,
+              "rules": [
+                {
+                  "type": "common",
+                  "key": "rule_anyfile"
+                },
+                {
+                  "type": "common",
+                  "key": "rule_anyfiletest"
+                },
+                {
+                  "type": "common",
+                  "key": "rule_mocks"
+                }
+              ]
+            },
+            {
+              "type": "directory",
+              "name": "usecase",
+              "isOptional": true,
+              "rules": [
+                {
+                  "type": "common",
+                  "key": "rule_anysubdirectory"
+                },
+                {
+                  "type": "common",
+                  "key": "rule_anyfile"
+                },
+                {
+                  "type": "common",
+                  "key": "rule_anyfiletest"
+                },
+                {
+                  "type": "common",
+                  "key": "rule_mocks"
+                }
+              ]
+            },
+            {
+              "type": "directory",
+              "name": "service",
+              "isOptional": true,
+              "rules": [
+                {
+                  "type": "common",
+                  "key": "rule_anysubdirectory"
+                },
+                {
+                  "type": "common",
+                  "key": "rule_anyfile"
+                },
+                {
+                  "type": "common",
+                  "key": "rule_anyfiletest"
+                },
+                {
+                  "type": "common",
+                  "key": "rule_mocks"
+                }
+              ]
+            },
+            {
+              "type": "directory",
+              "name": "repository",
+              "isOptional": true,
+              "rules": [
+                {
+                  "type": "directory",
+                  "name": "http",
+                  "isOptional": true,
+                  "rules": [
+                    {
+                      "type": "common",
+                      "key": "rule_anyfile"
+                    },
+                    {
+                      "type": "common",
+                      "key": "rule_anyfiletest"
+                    },
+                    {
+                      "type": "common",
+                      "key": "rule_mocks"
+                    }
+                  ]
+                },
+                {
+                  "type": "directory",
+                  "name": "sql",
+                  "isOptional": true,
+                  "rules": [
+                    {
+                      "type": "common",
+                      "key": "rule_anysubdirectory"
+                    },
+                    {
+                      "type": "common",
+                      "key": "rule_anyfile"
+                    },
+                    {
+                      "type": "common",
+                      "key": "rule_anyfiletest"
+                    },
+                    {
+                      "type": "common",
+                      "key": "rule_mocks"
+                    }
+                  ]
+                },
+                {
+                  "type": "directory",
+                  "name": "bigq",
+                  "isOptional": true,
+                  "rules": [
+                    {
+                      "type": "common",
+                      "key": "rule_anysubdirectory"
+                    },
+                    {
+                      "type": "common",
+                      "key": "rule_anyfile"
+                    },
+                    {
+                      "type": "common",
+                      "key": "rule_anyfiletest"
+                    },
+                    {
+                      "type": "common",
+                      "key": "rule_mocks"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "common",
+              "key": "rule_mocks"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

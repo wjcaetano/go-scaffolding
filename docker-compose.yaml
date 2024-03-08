@@ -1,0 +1,13 @@
+version: "2.1"
+services:
+  go-scaffolding:
+    build: .
+    command: ["/commands/run_local.sh"]
+    container_name: go-scaffolding
+    env_file: variables.env
+    ports:
+      - "8080:8080"
+    restart: always
+    volumes:
+      - .:/app
+      - $HOME/go/pkg/mod:/go/pkg/mod

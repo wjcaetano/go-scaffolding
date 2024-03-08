@@ -1,0 +1,7 @@
+FROM docker pull golang:1.22.1-alpine
+
+ENV APPLICATION_PACKAGE=./cmd/api \
+    APP_PATH=/app \
+    APPLICATION_REPO=github.com/wjcaetano/go-scaffolding \
+
+    GO_RACE_DETECTION_ENABLED="true"

@@ -1,0 +1,123 @@
+version: 1
+threshold:
+  compliance: 100
+  coverage: 0
+dependenciesRules:
+  - package: .*pkg.*
+    shouldNotDependsOn:
+      internal:
+        - .*entypoint.*
+        - .*usecase.*
+        - .*service.*
+        - .*repository.*
+  - package: .*internal.*
+    shouldNotDependsOn:
+      internal:
+        - .*entypoint.*
+        - .*usecase.*
+        - .*service.*
+        - .*repository.*
+  - package: .*entrypoint.*
+    shouldNotDependsOn:
+      internal:
+        - .*entypoint.*
+        - .*usecase.*
+        - .*service.*
+        - .*repository.*
+      external:
+        - .*bigquery.*
+        - .*cache.*
+        - .*gorm.*
+        - .*kvs.*
+        - .*mysql.*
+        - .*postgres.*
+        - .*sql.*
+  - package: .*usecase.*
+    shouldNotDependsOn:
+      internal:
+        - .*entypoint.*
+        - .*usecase.*
+        - .*service.*
+        - .*repository.*
+      external:
+        - .*bigquery.*
+        - .*cache.*
+        - .*gorm.*
+        - .*kvs.*
+        - .*mysql.*
+        - .*postgres.*
+        - .*sql.*
+        - .*api.*
+        - .*chi.*
+        - .*gin.*
+        - .*gorilla.*
+        - .*grpc.*
+        - .*header.*
+        - .*anydirectory.*
+        - .*json.*
+        - .*jwt.*
+        - .*mux.*
+        - .*protobuf.*
+        - .*querystring.*
+        - .*websocket.*
+  - package: .*service.*
+    shouldNotDependsOn:
+      internal:
+        - .*entypoint.*
+        - .*usecase.*
+        - .*service.*
+        - .*repository.*
+      external:
+        - .*bigquery.*
+        - .*cache.*
+        - .*gorm.*
+        - .*kvs.*
+        - .*mysql.*
+        - .*postgres.*
+        - .*sql.*
+        - .*api.*
+        - .*chi.*
+        - .*gin.*
+        - .*gorilla.*
+        - .*grpc.*
+        - .*header.*
+        - .*anydirectory.*
+        - .*json.*
+        - .*jwt.*
+        - .*mux.*
+        - .*protobuf.*
+        - .*querystring.*
+        - .*websocket.*
+  - package: .*repository.*
+    shouldNotDependsOn:
+      internal:
+        - .*entypoint.*
+        - .*usecase.*
+        - .*service.*
+        - .*repository.*
+  - package: .*repository.*http.*|.*repository.*anydirectory.*
+    shouldNotDependsOn:
+      external:
+        - .*bigquery.*
+        - .*cache.*
+        - .*gorm.*
+        - .*kvs.*
+        - .*mysql.*
+        - .*postgres.*
+        - .*sql.*
+  - package: .*repository.*sql.*
+    shouldNotDependsOn:
+      external:
+        - .*api.*
+        - .*chi.*
+        - .*gin.*
+        - .*gorilla.*
+        - .*grpc.*
+        - .*header.*
+        - .*anydirectory.*
+        - .*json.*
+        - .*jwt.*
+        - .*mux.*
+        - .*protobuf.*
+        - .*querystring.*
+        - .*websocket.*
