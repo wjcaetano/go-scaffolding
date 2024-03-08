@@ -47,10 +47,6 @@ hooks:
 	@chmod -R +x .git/hooks/pre-commit
 	@chmod -R +x .git/hooks/pre-push
 
-lint:
-	@eval $$(egrep -v '^#' variables.env | xargs) APP_PATH=$$PWD go list -e -compiled -test=true -export=false -deps=true -find=false ./... > /dev/null
-	@eval $$(egrep -v '^#' variables.env | xargs) APP_PATH=$$PWD golangci-lint run --config=.code_quality/.golangci.yml --new-from-rev=HEAD~1 --fix
-
 test:
 	@docker-compose build --force-rm <project-name>
 	@docker-compose run --rm <project-name> /commands/run_test.sh
@@ -92,11 +88,14 @@ guide_serve:
 	@${DOCKER_EXEC} run -p ${DOCKER_DOCS_GUIDE_CONTAINER_PORT}:3000 -d --name ${DOCKER_DOCS_GUIDE_CONTAINER} -v ${PWD}/docs/guide:/usr/local/docsify littlstar/docker-docsify:latest
 	@echo "Documentation Guide can be viewed at http://localhost:$(DOCKER_DOCS_GUIDE_CONTAINER_PORT)"
 
-.PHONY:
+.PHONY: lint
 lint:
 	@make lint-code
 	@make lint-arch
 	@make lint-directories
+	@eval $$(egrep -v '^#' variables.env | xargs) APP_PATH=$$PWD go list -e -compiled -test=true -export=false -deps=true -find=false ./... > /dev/null
+	@eval $$(egrep -v '^#' variables.env | xargs) APP_PATH=$$PWD golangci-lint run --config=.code_quality/.golangci.yml --new-from-rev=HEAD~1 --fix
+
 
 .PHONY:
 lint-code:

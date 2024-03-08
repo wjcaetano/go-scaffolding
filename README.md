@@ -142,7 +142,7 @@ git remote set-url origin <new-repository-url>
 ```
 
 3. Change the project name in the `go.mod` file:
-```go 
+``` 
 module <new-project-name>
 ```
 4. Change the project name in the `arch-go.yml` file:

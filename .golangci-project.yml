@@ -108,7 +108,6 @@ linters-settings:
 linters:
   enable:
     - bodyclose
-    - deadcode
     - depguard
     - dupl
     - errcheck
@@ -131,15 +130,12 @@ linters:
     - rowserrcheck
     - exportloopref
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unparam
     - unused
-    - varcheck
     - errorlint
-    - ifshort
     - sqlclosecheck
     - cyclop
     - revive
