@@ -90,6 +90,7 @@ guide_serve:
 
 .PHONY: lint
 lint:
+	@make format
 	@make lint-code
 	@make lint-arch
 	@make lint-directories
@@ -114,3 +115,9 @@ lint-arch:
 lint-directories:
 	@echo "Executing directory-validator"
 	commands/directory-validator.sh
+
+GOIMPORTS=goimports
+
+format:
+	@echo "Executing goimports"
+	@find . -name "*.go" -exec $(GOIMPORTS) -w {} \;
