@@ -33,10 +33,11 @@ run: down
 	@docker-compose up --build
 
 run_local:
-	@eval $$(egrep -v '^#' variables.env | xargs) APP_PATH=$$PWD go run cmd/api/*.go
+	@eval $$(cat resources/config/local.properties | grep -v '^#' | sed 's/^/export /') && APP_PATH=$$PWD go run cmd/api/*.go
 
-fs:
-	@make down
+fs: down
+	@docker-compose build
+	@docker-compose up -d
 
 hooks:
 	@if [ ! -d "commands/git/pre-commit" ]; then mkdir -p commands/git/pre-commit; fi
@@ -55,15 +56,19 @@ cleanup:
 	@find . -type d -name mocks -exec rm -rf {} \;
 
 mocks: cleanup
+	@make load_env
 	@eval $$(egrep -v '^#' variables.env | xargs) APP_PATH=$$PWD go generate ./...
 
 test_local:
-	@eval $$(egrep -v '^#' variables.env | xargs) APP_PATH=$$PWD go test ./... -count 1 -tags=integration -cover -p=1
+	@make load_env
+	@eval $$(cat resources/config/local.properties | grep -v '^#' | sed 's/^/export /') && APP_PATH=$$PWD go test ./... -count 1 -tags=integration -cover -p=1
 
 test_up: down
+	@make load_env
 	@docker-compose up -d
 
 test_run:
+	@make load_env
 	@docker-compose exec <project-name> /commands/test.sh
 
 .PHONY:
@@ -114,7 +119,8 @@ lint-arch:
 
 lint-directories:
 	@echo "Executing directory-validator"
-	commands/directory-validator.sh
+	@export PATH=$$PATH:/usr/local/go/bin && export PATH=$$PATH:/usr/local/bin/docker && commands/directory-validator.sh
+	@source ~/.bashrc
 
 GOIMPORTS=goimports
 
