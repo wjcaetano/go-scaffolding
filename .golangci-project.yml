@@ -8,7 +8,7 @@ run:
 # output configuration options
 output:
   # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
-  format: colored-line-number
+  formats: colored-line-number
   # print lines of code with issue, default is true
   print-issued-lines: true
   # print linter name in the end of issue text, default is true
@@ -59,7 +59,7 @@ linters-settings:
     min-occurrences: 3
   godot:
     # check all top-level comments, not only declarations
-    check-all: true
+    scape: all
   gomnd:
     settings:
       mnd:
@@ -81,7 +81,7 @@ linters-settings:
     multi-func: false # Enforces newlines (or comments) after every multi-line function signature
   gocyclo:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
-    min-complexity: 6
+    min-complexity: 8
   grouper:
     const-require-grouping: true
   revive:
@@ -118,7 +118,7 @@ linters:
     - godot
     - gofmt
     - goimports
-    - gomnd
+    - mnd
     - goprintffuncname
     - gosec
     - gosimple
@@ -128,7 +128,7 @@ linters:
     - nakedret
     - nestif
     - rowserrcheck
-    - exportloopref
+    - copyloopvar
     - staticcheck
     - stylecheck
     - typecheck
@@ -147,10 +147,8 @@ linters:
     - grouper
     - nilnil
   disable:
-    - maligned
     - prealloc
     - testpackage
-    - scopelint
   disable-all: false
   presets:
     - bugs

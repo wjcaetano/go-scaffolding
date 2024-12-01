@@ -41,8 +41,7 @@
     "arch-go.yml",
     "CHANGELOG.md",
     "execution.log",
-    ".DS_Store",
-    "meli-system.yml"
+    ".DS_Store"
   ],
   "ignoreDirs": [
     "commands",
@@ -60,7 +59,8 @@
     "internal",
     "migrations",
     "pkg",
-    "resources"
+    "resources",
+    ".idx"
   ],
   "commonRules": {
     "rule_mocks": {
