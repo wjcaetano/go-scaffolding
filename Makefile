@@ -34,8 +34,6 @@ run: down
 	@docker compose up --build
 
 run_local:
-	@echo "Stopping and removing existing Swagger UI container (if any)"
-	@docker rm -f swagger-ui || true
 	@eval $$(cat resources/config/local.properties | grep -v '^#' | sed 's/^/export /' | sed 's/\./_/g') && export APP_PATH=$$PWD && export configFileName=resources/config/local.properties && export SCOPE=local && go run cmd/api/*.go
 
 fs: down
@@ -74,7 +72,7 @@ test_run:
 	@make load_env
 	@docker compose exec <project-name> /commands/test.sh
 
-.PHONY:
+.PHONY: specs_generate
 specs_generate:
 	@echo "Generating OpenAPI documentation using Docker"
 	docker run --rm \
@@ -84,7 +82,7 @@ specs_generate:
 		-i /local/openapi.yaml \
 		-o /local
 
-.PHONY:
+.PHONY: specs_serve
 specs_serve:
 	@echo "Stopping and removing existing Swagger UI container (if any)"
 	@docker rm -f swagger-ui || true
