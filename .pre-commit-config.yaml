@@ -18,9 +18,3 @@ repos:
           - --max-same-issues=0
           - --config=.code_quality/.golangci.yml
           - --new-from-rev=HEAD~1 # comment this arg if you want to run pre-commit run --all-files
-  - repo: https://github.com/melisource/fury_datasec-git-hooks
-    rev: 1.0.1
-    hooks:
-      - id: pre_commit_hook
-        stages: [commit]
-        verbose: true
