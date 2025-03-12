@@ -1,8 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"go-scaffolding/cmd/api/modules"
+)
 
 func main() {
-	fmt.Println("Hello World")
-
+	app := modules.NewApp()
+	app.Run()
 }
