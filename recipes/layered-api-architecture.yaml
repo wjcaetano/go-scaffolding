@@ -1,0 +1,245 @@
+name: my-layered-api
+version: 1.0.0
+author: '{{.Author | default "Jules"}}'
+description: A recipe for a robust, scalable layered API architecture in Go, inspired by Clean/Hexagonal Architecture.
+
+directories:
+  - app/domain/entity
+  - app/domain/entrypoint/rest
+  - app/domain/repository
+  - app/domain/service
+  - app/domain/usecase
+  - cmd/api/modules
+  - commands/git
+  - docs/guide
+  - docs/specs
+  - internal/config
+  - internal/db
+  - internal/httpclient
+  - internal/metrics
+  - internal/publisher
+  - internal/server
+  - pkg/apperror
+  - pkg/http/errorhandler
+  - pkg/http/parser
+  - pkg/http/render
+  - pkg/validator
+  - resources/config
+  - test/integration
+
+files:
+  - path: README.md
+    content: |
+      # {{.Name}}
+
+      A new project generated with the layered API architecture.
+
+      ## Project Structure
+
+      This project follows a layered architecture, separating concerns to promote scalability and maintainability.
+
+      - `app/`: Contains the core application logic.
+        - `domain/`: Defines the business rules and entities.
+          - `entity/`: Business objects (e.g., User, Product).
+          - `usecase/`: Implements the business logic.
+          - `repository/`: Interfaces for data persistence.
+      - `cmd/api/`: Entry point for the application.
+      - `internal/`: Contains infrastructure-specific code.
+        - `server/`: HTTP server setup.
+        - `db/`: Database connection and repository implementations.
+        - `config/`: Configuration loading.
+      - `pkg/`: Shared libraries and utilities.
+
+  - path: go.mod
+    content: |
+      module {{.Name}}
+
+      go 1.22.1
+
+      require (
+	github.com/gin-gonic/gin v1.10.0
+	go.uber.org/fx v1.23.0
+      )
+
+  - path: Makefile
+    content: |
+      .PHONY: run build test lint
+
+      run:
+	go run cmd/api/main.go
+
+      build:
+	docker build -t {{.Name}} .
+
+      test:
+	go test ./...
+
+      lint:
+	golangci-lint run
+
+  - path: Dockerfile
+    content: |
+      # build stage
+      FROM golang:1.22-alpine AS builder
+      WORKDIR /app
+      COPY go.mod go.sum ./
+      RUN go mod download
+      COPY . .
+      RUN CGO_ENABLED=0 GOOS=linux go build -v -o server cmd/api/main.go
+
+      # final stage
+      FROM alpine:latest
+      WORKDIR /app
+      COPY --from=builder /app/server .
+      COPY --from=builder /app/resources/config/ ./resources/config/
+      EXPOSE 8080
+      CMD ["./server"]
+
+  - path: docker-compose.yaml
+    content: |
+      version: '3.8'
+      services:
+        api:
+          build: .
+          ports:
+            - "8080:8080"
+          volumes:
+            - .:/app
+
+  - path: .gitignore
+    content: |
+      # Binaries
+      *.exe
+      *.test
+      server
+
+      # IDE
+      .idea/
+      .vscode/
+
+      # Misc
+      .DS_Store
+      *.out
+      output/
+      test-output/
+
+  - path: cmd/api/main.go
+    content: |
+      package main
+
+      import (
+        "{{.Name}}/cmd/api/modules"
+	"go.uber.org/fx"
+      )
+
+      func main() {
+        fx.New(modules.AppModule).Run()
+      }
+
+  - path: cmd/api/modules/app.go
+    content: |
+      package modules
+
+      import (
+	"{{.Name}}/internal/server"
+	"go.uber.org/fx"
+      )
+
+      var AppModule = fx.Options(
+        server.Module,
+        // Add other modules here (e.g., usecase, repository)
+      )
+
+
+  - path: internal/server/server.go
+    content: |
+      package server
+
+      import (
+	"context"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/fx"
+      )
+
+      func NewServer() *gin.Engine {
+        r := gin.Default()
+
+        r.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "ok"})
+	})
+        // Add your routes here
+
+        return r
+      }
+
+      func StartServer(lc fx.Lifecycle, r *gin.Engine) {
+        lc.Append(fx.Hook{
+          OnStart: func(ctx context.Context) error {
+            go r.Run(":8080")
+            return nil
+          },
+          OnStop: func(ctx context.Context) error {
+            return nil // Add graceful shutdown logic here
+          },
+        })
+      }
+
+      var Module = fx.Provide(
+        NewServer,
+      )
+
+      var Invokes = fx.Invoke(
+        StartServer,
+      )
+
+  - path: app/domain/entity/user.go
+    content: |
+      package entity
+
+      // User represents a user in the system.
+      type User struct {
+        ID   int64
+        Name string
+      }
+
+  - path: app/domain/usecase/user_usecase.go
+    content: |
+      package usecase
+
+      import "{{.Name}}/app/domain/entity"
+
+      // UserUseCase defines the interface for user-related business logic.
+      type UserUseCase interface {
+        GetUser(id int64) (*entity.User, error)
+      }
+
+  - path: app/domain/repository/user_repository.go
+    content: |
+      package repository
+
+      import "{{.Name}}/app/domain/entity"
+
+      // UserRepository defines the interface for user data persistence.
+      type UserRepository interface {
+        FindByID(id int64) (*entity.User, error)
+      }
+
+  - path: internal/config/config.go
+    content: |
+      package config
+
+      // Config holds the application configuration.
+      type Config struct {
+        // Add configuration fields here
+      }
+
+      func Load() (*Config, error) {
+        // Implement configuration loading (e.g., from env vars or a file)
+        return &Config{}, nil
+      }
+
+  - path: resources/config/local.properties
+    content: |
+      # Local configuration
+      DB_HOST=localhost
+      DB_PORT=5432
