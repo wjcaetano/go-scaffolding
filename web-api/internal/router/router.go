@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-scaffolding/internal/routes"
+	"go-scaffolding/web-api/internal/routes"
 )
 
 func NewRouter() *gin.Engine {

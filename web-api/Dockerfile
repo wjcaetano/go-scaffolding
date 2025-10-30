@@ -1,6 +1,6 @@
 FROM golang:alpine3.19
 
-ENV APPLICATION_PACKAGE=./cmd/go-scaffolding
+ENV APPLICATION_PACKAGE=./cmd/web-api
 ENV APP_PATH=/app
 ENV GO_TEST_FLAGS="-tags=integration -p=1"
 ENV SCOPE=local

@@ -3,9 +3,9 @@ all: help
 SHELL := /bin/bash
 
 help:
-	@echo "<project-name> Makefile commands"
+	@echo "go-scaffolding Makefile commands"
 	@echo ""
-	@echo "build                 Executes the build of all images required to run <project-name> API"
+	@echo "build                 Executes the build of all images required to run go-scaffolding API"
 	@echo "down                  Stops all docker containers"
 	@echo "run                   Start all containers and keep attached"
 	@echo "run_local             Run application in the current terminal"
@@ -50,8 +50,8 @@ hooks:
 	@chmod -R +x .git/hooks/pre-push
 
 test:
-	@docker compose build --force-rm <project-name>
-	@docker compose run --rm <project-name> /commands/run_test.sh
+	@docker compose build --force-rm go-scaffolding
+	@docker compose run --rm go-scaffolding /commands/run_test.sh
 
 cleanup:
 	@find . -type d -name mocks -exec rm -rf {} \;
@@ -70,7 +70,7 @@ test_up: down
 
 test_run:
 	@make load_env
-	@docker compose exec <project-name> /commands/test.sh
+	@docker compose exec go-scaffolding /commands/test.sh
 
 .PHONY: specs_generate
 specs_generate:

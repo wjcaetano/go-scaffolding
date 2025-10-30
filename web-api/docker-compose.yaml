@@ -1,9 +1,9 @@
 version: "2.1"
 services:
-  go-scaffolding:
+  web-api:
     build: .
     command: ["/commands/run_local.sh"]
-    container_name: go-scaffolding
+    container_name: web-api
     env_file: variables.env
     ports:
       - "8080:8080"

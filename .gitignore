@@ -51,3 +51,5 @@ __debug_bin
 #Static files generated
 docs/dependencies
 docs/specs/index.html
+output/
+test-output/

@@ -56,7 +56,7 @@ To be able to run/debug this application on VSCode, here is a example of a `laun
 Some variables are necessary to run application:
 
 ```sh
-export APP_PATH="/Users/username/go/src/github.com/<new-project-name>"
+export APP_PATH="/Users/username/go/src/github.com/go-scaffolding"
 export SCOPE="local"
 export checksumEnabled="false"
 ```
@@ -72,13 +72,13 @@ When developing using Go modules, it is imperative that you add the following `e
 (usually in your `~/.profile` or equivalent):
 
 ```sh
-export GOPRIVATE="github.com/<new-project-name>"
+export GOPRIVATE="github.com/go-scaffolding"
 ```
 
 If using Go 1.13+ you can run once:
 
 ```sh
-go env -w GOPRIVATE="github.com/<new-project-name>"
+go env -w GOPRIVATE="github.com/go-scaffolding"
 ```
 
 Once you've set `GOPRIVATE`, Go modules resolver will use git to clone repositories that match with the value in the env

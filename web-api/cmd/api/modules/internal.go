@@ -1,8 +1,8 @@
 package modules
 
 import (
-	"go-scaffolding/internal/router"
-	"go-scaffolding/internal/server"
+	"go-scaffolding/web-api/internal/router"
+	"go-scaffolding/web-api/internal/server"
 	"go.uber.org/fx"
 )
 

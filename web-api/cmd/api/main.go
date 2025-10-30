@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-scaffolding/cmd/api/modules"
+	"go-scaffolding/web-api/cmd/api/modules"
 )
 
 func main() {
